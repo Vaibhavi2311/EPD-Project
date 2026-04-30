@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard · SPPU Question Bank</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="app-page">
+
+  <!-- ── Top Navigation ─────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="app-header-inner">
+      <a href="/dashboard" class="nav-logo"><span>SPPU</span> QB</a>
+      <nav class="app-nav">
+        <button class="nav-tab active" data-tab="browse">Browse</button>
+        <button class="nav-tab" data-tab="important">⭐ Important</button>
+        <button class="nav-tab" data-tab="saved">🔖 Saved</button>
+        <button class="nav-tab" data-tab="notifications">🔔 <span id="notif-badge" class="notif-dot" hidden></span></button>
+      </nav>
+      <div class="header-user">
+        <span id="user-name" class="user-chip"></span>
+        <button class="btn btn-ghost-sm" id="logout-btn">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Toast ─────────────────────────────────────────────── -->
+  <div id="toast" class="toast" role="alert"></div>
+
+  <main class="app-main">
+
+    <!-- ═══ TAB: BROWSE ═══════════════════════════════════════ -->
+    <div id="tab-browse" class="tab-panel active">
+      <div class="panel-head">
+        <div>
+          <h1 class="panel-title">Browse Questions</h1>
+          <p class="panel-sub">Filter by subject, topic, and year</p>
+        </div>
+        <span class="total-chip">Total: <strong id="total-q">—</strong></span>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-card">
+        <div class="filter-row">
+          <div class="field">
+            <label>Subject</label>
+            <select id="f-subject"><option value="">All Subjects</option></select>
+          </div>
+          <div class="field">
+            <label>Topic</label>
+            <select id="f-topic" disabled><option value="">All Topics</option></select>
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <input type="text" id="f-year" placeholder="e.g. 2023" />
+          </div>
+          <div class="filter-btns">
+            <button class="btn btn-accent" id="search-btn">Search</button>
+            <button class="btn btn-ghost-sm" id="reset-btn">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="browse-loading" class="loader-wrap" hidden><div class="loader"></div><p>Loading…</p></div>
+      <div id="browse-results" class="results-header" hidden>
+        <span id="result-count" class="result-label"></span>
+      </div>
+      <div id="questions-list" class="q-list"></div>
+      <div id="browse-empty" class="empty-state" hidden>
+        <span class="empty-icon">📭</span>
+        <p>No questions matched your filters.</p>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: IMPORTANT ════════════════════════════════════ -->
+    <div id="tab-important" class="tab-panel" hidden>
+      <div class="panel-head">
+        <div>
+          <h1 class="panel-title">⭐ Important Questions</h1>
+          <p class="panel-sub">Frequently-asked and admin-curated questions for smart revision</p>
+        </div>
+      </div>
+      <div id="important-loading" class="loader-wrap" hidden><div class="loader"></div><p>Loading…</p></div>
+      <div id="important-list" class="q-list"></div>
+      <div id="important-empty" class="empty-state" hidden>
+        <span class="empty-icon">⭐</span>
+        <p>No important questions marked yet. Check back soon!</p>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: SAVED ════════════════════════════════════════ -->
+    <div id="tab-saved" class="tab-panel" hidden>
+      <div class="panel-head">
+        <div>
+          <h1 class="panel-title">🔖 Saved Questions</h1>
+          <p class="panel-sub">Your personal revision list</p>
+        </div>
+      </div>
+      <div id="saved-loading" class="loader-wrap" hidden><div class="loader"></div><p>Loading…</p></div>
+      <div id="saved-list" class="q-list"></div>
+      <div id="saved-empty" class="empty-state" hidden>
+        <span class="empty-icon">🔖</span>
+        <p>No saved questions yet. Click the bookmark icon on any question to save it.</p>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: NOTIFICATIONS ════════════════════════════════ -->
+    <div id="tab-notifications" class="tab-panel" hidden>
+      <div class="panel-head">
+        <div>
+          <h1 class="panel-title">🔔 Notifications</h1>
+          <p class="panel-sub">Updates from admin</p>
+        </div>
+      </div>
+      <div id="notif-loading" class="loader-wrap" hidden><div class="loader"></div></div>
+      <div id="notif-list" class="notif-list"></div>
+      <div id="notif-empty" class="empty-state" hidden>
+        <span class="empty-icon">🔔</span>
+        <p>No notifications yet.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SPPU Question Bank</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="landing-page">
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo"><span>SPPU</span> Question Bank</a>
+      <div class="nav-links">
+        <a href="/login" class="btn btn-ghost-sm">Log In</a>
+        <a href="/register" class="btn btn-accent-sm">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge">📚 For SPPU Engineering Students</div>
+      <h1 class="hero-title">Ace Your Exams<br /><em>Smarter.</em></h1>
+      <p class="hero-sub">Topic-wise previous year questions, organized by subject, topic, and year. Built for focused exam preparation.</p>
+      <div class="hero-actions">
+        <a href="/register" class="btn btn-accent">Start for Free</a>
+        <a href="/login" class="btn btn-outline">I have an account →</a>
+      </div>
+    </div>
+    <div class="hero-cards">
+      <div class="feat-card" style="--d:0ms">
+        <div class="feat-icon">🎯</div>
+        <h3>Topic-wise Filter</h3>
+        <p>Zero in on Normalization, Deadlock, TCP/IP and more.</p>
+      </div>
+      <div class="feat-card" style="--d:80ms">
+        <div class="feat-icon">⭐</div>
+        <h3>Important Questions</h3>
+        <p>Admin-curated frequently-asked questions for smart revision.</p>
+      </div>
+      <div class="feat-card" style="--d:160ms">
+        <div class="feat-icon">📅</div>
+        <h3>Year-wise Archive</h3>
+        <p>Filter by exam year to spot trends and repeated patterns.</p>
+      </div>
+      <div class="feat-card" style="--d:240ms">
+        <div class="feat-icon">🔔</div>
+        <h3>Live Notifications</h3>
+        <p>Stay updated with new questions and syllabus changes.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2024 SPPU Question Bank · All rights reserved</p>
+  </footer>
+
+  <script>
+    // Redirect logged-in users to dashboard
+    const token = localStorage.getItem('token');
+    if (token) window.location.href = '/dashboard';
+  </script>
+</body>
+</html>

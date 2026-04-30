@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel · SPPU Question Bank</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="app-page admin-page">
+
+  <header class="app-header admin-header">
+    <div class="app-header-inner">
+      <a href="/admin" class="nav-logo"><span>SPPU</span> QB <span class="admin-chip">ADMIN</span></a>
+      <nav class="app-nav">
+        <button class="nav-tab active" data-tab="stats">📊 Dashboard</button>
+        <button class="nav-tab" data-tab="questions">❓ Questions</button>
+        <button class="nav-tab" data-tab="users">👥 Users</button>
+        <button class="nav-tab" data-tab="notifs">🔔 Notifications</button>
+      </nav>
+      <div class="header-user">
+        <span class="user-chip admin-badge">Admin</span>
+        <button class="btn btn-ghost-sm" id="logout-btn">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div id="toast" class="toast" role="alert"></div>
+
+  <main class="app-main">
+
+    <!-- ═══ TAB: STATS ════════════════════════════════════════ -->
+    <div id="tab-stats" class="tab-panel active">
+      <div class="panel-head">
+        <h1 class="panel-title">Admin Dashboard</h1>
+        <p class="panel-sub">Overview of the question bank</p>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card"><div class="stat-val" id="s-questions">—</div><div class="stat-label">Total Questions</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-students">—</div><div class="stat-label">Registered Students</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-subjects">—</div><div class="stat-label">Subjects</div></div>
+        <div class="stat-card accent-card"><div class="stat-val" id="s-important">—</div><div class="stat-label">Important Questions</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ TAB: QUESTIONS ════════════════════════════════════ -->
+    <div id="tab-questions" class="tab-panel" hidden>
+      <div class="panel-head">
+        <div>
+          <h1 class="panel-title">Manage Questions</h1>
+          <p class="panel-sub">Add, edit, or delete questions</p>
+        </div>
+        <button class="btn btn-accent" id="open-add-modal">+ Add Question</button>
+      </div>
+
+      <!-- Search/filter for admin -->
+      <div class="filter-card compact">
+        <input type="text" id="admin-search" placeholder="Search by subject, topic, or question text…" />
+      </div>
+
+      <div id="admin-q-loading" class="loader-wrap" hidden><div class="loader"></div></div>
+      <div id="admin-q-table-wrap">
+        <table class="data-table" id="admin-q-table">
+          <thead>
+            <tr>
+              <th>Subject</th><th>Topic</th><th>Question</th><th>Year</th><th>Marks</th><th>⭐</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-q-body"></tbody>
+        </table>
+      </div>
+      <div id="admin-q-empty" class="empty-state" hidden><span class="empty-icon">❓</span><p>No questions yet. Add one!</p></div>
+    </div>
+
+    <!-- ═══ TAB: USERS ════════════════════════════════════════ -->
+    <div id="tab-users" class="tab-panel" hidden>
+      <div class="panel-head">
+        <h1 class="panel-title">Manage Users</h1>
+        <p class="panel-sub">View registered students and manage access</p>
+      </div>
+      <div id="users-loading" class="loader-wrap" hidden><div class="loader"></div></div>
+      <table class="data-table" id="users-table">
+        <thead><tr><th>Name</th><th>Email</th><th>Registered</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="users-body"></tbody>
+      </table>
+      <div id="users-empty" class="empty-state" hidden><span class="empty-icon">👥</span><p>No students registered yet.</p></div>
+    </div>
+
+    <!-- ═══ TAB: NOTIFICATIONS ════════════════════════════════ -->
+    <div id="tab-notifs" class="tab-panel" hidden>
+      <div class="panel-head">
+        <div>
+          <h1 class="panel-title">Send Notifications</h1>
+          <p class="panel-sub">Broadcast updates to all students</p>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <h3 class="card-title-sm">New Notification</h3>
+        <div class="form-inline">
+          <div class="field">
+            <label>Title</label>
+            <input type="text" id="notif-title" placeholder="e.g. New questions added!" />
+          </div>
+          <div class="field">
+            <label>Type</label>
+            <select id="notif-type">
+              <option value="info">Info</option>
+              <option value="important">Important</option>
+              <option value="update">Update</option>
+            </select>
+          </div>
+          <div class="field full-width">
+            <label>Message</label>
+            <textarea id="notif-msg" rows="2" placeholder="Write your message here…"></textarea>
+          </div>
+          <button class="btn btn-accent" id="send-notif-btn">Send Notification</button>
+        </div>
+      </div>
+
+      <h3 class="section-label">Recent Notifications</h3>
+      <div id="notif-list" class="notif-list"></div>
+      <div id="notif-empty" class="empty-state" hidden><span class="empty-icon">🔔</span><p>No notifications sent yet.</p></div>
+    </div>
+
+  </main>
+
+  <!-- ── Add / Edit Question Modal ──────────────────────────── -->
+  <div id="q-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Question</h3>
+        <button class="modal-close" id="close-modal">✕</button>
+      </div>
+      <form id="q-form" novalidate>
+        <input type="hidden" id="q-id" />
+        <div class="form-grid-2">
+          <div class="field">
+            <label>Subject <span class="req">*</span></label>
+            <input type="text" id="q-subject" placeholder="e.g. DBMS" list="subj-list" />
+            <datalist id="subj-list">
+              <option value="DBMS"/><option value="Operating Systems"/><option value="Computer Networks"/>
+              <option value="Data Structures"/><option value="Software Engineering"/>
+              <option value="Theory of Computation"/><option value="Compiler Design"/>
+            </datalist>
+            <span class="field-err" id="err-q-subject"></span>
+          </div>
+          <div class="field">
+            <label>Topic <span class="req">*</span></label>
+            <input type="text" id="q-topic" placeholder="e.g. Normalization" />
+            <span class="field-err" id="err-q-topic"></span>
+          </div>
+          <div class="field">
+            <label>Year <span class="req">*</span></label>
+            <input type="text" id="q-year" placeholder="e.g. 2023" />
+            <span class="field-err" id="err-q-year"></span>
+          </div>
+          <div class="field">
+            <label>Marks</label>
+            <input type="number" id="q-marks" placeholder="e.g. 5" min="0" />
+          </div>
+          <div class="field">
+            <label>Times appeared (frequency)</label>
+            <input type="number" id="q-freq" placeholder="1" min="1" value="1" />
+          </div>
+          <div class="field" style="align-self:end">
+            <label class="checkbox-label">
+              <input type="checkbox" id="q-important" />
+              Mark as Important ⭐
+            </label>
+          </div>
+          <div class="field full-width">
+            <label>Question Text <span class="req">*</span></label>
+            <textarea id="q-text" rows="3" placeholder="Type the full question here…"></textarea>
+            <span class="field-err" id="err-q-text"></span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-accent" id="q-submit-btn">
+            <span class="btn-label">Save Question</span>
+            <span class="btn-spin" hidden>⟳</span>
+          </button>
+          <button type="button" class="btn btn-ghost-sm" id="cancel-modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

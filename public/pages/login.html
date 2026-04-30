@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In · SPPU Question Bank</title>
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-split">
+    <!-- Left panel -->
+    <div class="auth-left">
+      <a href="/" class="auth-logo"><span>SPPU</span> QB</a>
+      <div class="auth-left-content">
+        <h1>Welcome<br /><em>Back.</em></h1>
+        <p>Your question bank is waiting. Log in to continue your exam prep.</p>
+      </div>
+    </div>
+
+    <!-- Right panel: form -->
+    <div class="auth-right">
+      <div class="auth-box">
+        <h2>Log In</h2>
+        <p class="auth-sub">Enter your email and password to access your account.</p>
+
+        <div id="toast" class="toast" role="alert"></div>
+
+        <form id="login-form" novalidate>
+          <div class="field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+            <span class="field-err" id="err-email"></span>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+              <button type="button" class="eye-btn" id="toggle-pw" title="Show/hide password">👁</button>
+            </div>
+            <span class="field-err" id="err-password"></span>
+          </div>
+
+          <button type="submit" class="btn btn-accent btn-full" id="login-btn">
+            <span class="btn-label">Log In</span>
+            <span class="btn-spin" hidden>⟳</span>
+          </button>
+        </form>
+
+        <p class="auth-switch">Don't have an account? <a href="/register">Register here</a></p>
+
+        <div class="demo-creds">
+          <p><strong>Admin demo:</strong> admin@sppu.edu / Admin@123</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', handleLogin);
+    document.getElementById('toggle-pw').addEventListener('click', () => {
+      const pw = document.getElementById('password');
+      pw.type = pw.type === 'password' ? 'text' : 'password';
+    });
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      clearErrors();
+      let valid = true;
+      if (!email)    { setErr('err-email', 'Email is required.'); valid = false; }
+      if (!password) { setErr('err-password', 'Password is required.'); valid = false; }
+      if (!valid) return;
+
+      setBusy(true);
+      try {
+        const res  = await fetch('/api/auth/login', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        if (!data.success) { showToast(data.message, 'error'); return; }
+
+        // Store token and user info
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user',  JSON.stringify(data.user));
+
+        showToast('Login successful! Redirecting…', 'success');
+        setTimeout(() => {
+          window.location.href = data.user.role === 'admin' ? '/admin' : '/dashboard';
+        }, 800);
+      } catch {
+        showToast('Network error. Is the server running?', 'error');
+      } finally {
+        setBusy(false);
+      }
+    }
+  </script>
+</body>
+</html>
