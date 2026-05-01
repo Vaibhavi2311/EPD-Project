@@ -92,10 +92,12 @@
 
         showToast('Login successful! Redirecting…', 'success');
         setTimeout(() => {
-         
-  window.location.href = "/index.html";
-
-        }, 800);
+  if (data.user.role === "admin") {
+    window.location.href = "/admin";
+  } else {
+    window.location.href = "/dashboard";
+  }
+}, 800);
       } catch {
         showToast('Network error. Is the server running?', 'error');
       } finally {
