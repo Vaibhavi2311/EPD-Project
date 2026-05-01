@@ -390,6 +390,3 @@ function showLoading(id, v) {
   const el = document.getElementById(id);
   if (el) el.hidden = !v;
 }
-if (!user) {
-  window.location = "index.html";
-}
