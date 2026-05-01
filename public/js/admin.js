@@ -391,5 +391,5 @@ function showLoading(id, v) {
   if (el) el.hidden = !v;
 }
 if (!user) {
-  window.location = "login.html";
+  window.location = "index.html";
 }
