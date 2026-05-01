@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (nameEl && user) nameEl.textContent = user.name;
 
   // Redirect admin to admin panel
-  if (user?.role === 'admin') { window.location.href = '/admin'; return; }
+  if (user?.role === 'admin') { window.location.href = '/index'; return; }
 
   // Init tabs
   const TABS = ['browse', 'important', 'saved', 'notifications'];
