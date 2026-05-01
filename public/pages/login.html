@@ -7,17 +7,9 @@
   <link rel="stylesheet" href="/css/main.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="js/login.js"></script>
+  
 </head>
 <body class="auth-page">
-<script>
-
-const user = localStorage.getItem("user");
-
-if (user && window.location.pathname.includes("login")) {
-  window.location.href = "index.html";
-}
-</script>
 
   <div class="auth-split">
     <!-- Left panel -->
@@ -111,5 +103,12 @@ if (user && window.location.pathname.includes("login")) {
       }
     }
   </script>
+  <script>
+const user = localStorage.getItem("user");
+
+if (user && window.location.pathname.includes("login")) {
+  window.location.href = "index.html";
+}
+</script>
 </body>
 </html>
